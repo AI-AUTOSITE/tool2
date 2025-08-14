@@ -36,18 +36,18 @@ export default function Home() {
     setResult(null);
     const form = new FormData(e.currentTarget);
 
-    try {
-      const res = await fetch("/api/resume-cover", { method: "POST", body: form });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Failed");
-      setResult(data.result);
-      // 完了後は最終ステップに揃える
-      setStep(last);
-    } catch (err: any) {
-      setError(err?.message || "Unexpected error");
-    } finally {
-      setLoading(false);
-    }
+      try {
+    const res = await fetch("/api/resume-cover", { method: "POST", body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || "Failed");
+    setResult(data.result);
+    setStep(last);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unexpected error";
+    setError(message);
+  } finally {
+    setLoading(false);
+  }
   }
 
   const gotoNext = () => setStep((s) => Math.min(s + 1, last));
